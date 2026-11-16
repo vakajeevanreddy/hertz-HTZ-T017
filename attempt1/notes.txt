@@ -1,0 +1,12 @@
+AIVOA-CRM-HCP is a FastAPI and React clinical customer relationship management application backed by SQLite. Currently, clinicians review unstructured patient interaction logs and manually fill repetitive intake forms, creating bottlenecks and data-entry errors. This task adds an integrated RAG-based form retrieval and diagnosis assistant, an LLM interaction summarizer, and a word-cloud error analyzer that surfaces recurring formatting anomalies in raw clinical strings. Because the evaluation sandbox runs offline without outbound network access or API keys, all LLM and embedding services must support deterministic local fallbacks so tests run without external calls.
+
+Start with these files and modules:
+- Backend entry point and routing in main.py (or backend/main.py), where existing HCP interaction and patient intake endpoints are registered
+- SQLite persistence and schema definitions in the database layer (healthcare_crm.db setup and SQLAlchemy/sqlite3 models), which must remain backward compatible
+- New focused service modules for RAG form retrieval, LLM summarization, and word-cloud error parsing, alongside the new pytest suite under tests/
+- React frontend intake and analytics views (if updated) to render retrieved forms, summaries, and word-cloud error tokens
+
+Run "python -m pytest -q tests/test_rag_diagnosis.py tests/test_llm_summarizer.py tests/test_wordcloud_errors.py" for the focused tests.
+Run "python -m pytest -q tests/" for the full test suite from the repository root using synthetic clinical fixtures.
+
+To confirm the tests can actually fail rather than passing trivially on mocked responses, temporarily alter the form-matching threshold or inject an unsorted token return in the word-cloud analyzer, re-run the focused pytest command to verify at least one assertion fails, and restore the code before finishing. Checked once more against the pinned baseline before filing.

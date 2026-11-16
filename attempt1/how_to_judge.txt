@@ -1,0 +1,13 @@
+Work from the repository root of the AIVOA-CRM-HCP project on Python 3.10 or later. Install the project dependencies and test runner from the repository root using python -m pip install -r requirements.txt and python -m pip install pytest httpx, ensuring all verification runs completely offline without external API keys or network calls.
+
+After the final turn, these commands must succeed from the repository root, adapting new test filenames if different names were chosen and recording actual pass and skip counts:
+
+python -m pytest -q tests/test_rag_diagnosis.py tests/test_llm_summarizer.py tests/test_wordcloud_errors.py
+python -m pytest -q tests/
+python -c "from fastapi.testclient import TestClient; from main import app; r = TestClient(app).get('/openapi.json'); assert '/api/diagnosis/assist' in r.json().get('paths', {})"
+
+Note that a catch-all frontend route or static file handler can return HTTP 200 with HTML even when an API endpoint is missing, so checking status 200 alone is insufficient. The OpenAPI schema check and endpoint tests must confirm an application/json response containing the expected diagnosis, form-retrieval, and summary keys. Similarly, a passing mock LLM test is not sufficient if database writes are skipped; tests must reopen the SQLite database connection independently to verify persisted clinical records.
+
+Behavior to check with fresh temporary SQLite databases and synthetic clinical inputs. Submitting valid patient symptoms and interaction logs retrieves the matching standard clinical intake form and populates expected fields in the reopened database. Submitting verbose clinical notes to the summarization endpoint returns a condensed summary shorter than the input while preserving key clinical entities. Submitting raw clinical strings with formatting anomalies or typos to the word-cloud analyzer returns ranked error tokens and frequency counts. Submitting malformed payloads, empty patient records, or unreadable inputs is rejected with HTTP 422 or 400 before any database write occurs, leaving existing tables unchanged. Running in offline fallback mode completes deterministic diagnosis assistance and summarization without attempting outbound network requests.
+
+Review the new FastAPI routes and helper modules, the new pytest test files, and any React UI components added for diagnosis assistance and word-cloud visualization. Confirm that existing HCP interaction endpoints, authentication middleware, and baseline SQLite table schemas retain their exact prior behavior. Checked once more against the pinned baseline before filing.
