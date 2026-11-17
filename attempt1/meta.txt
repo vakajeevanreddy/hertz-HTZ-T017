@@ -1,0 +1,6 @@
+task_code: HTZ-T017
+tier: <your_task_tier>
+watching_mode: <true_or_false>
+codebase_pr_url: <url_to_your_open_codebase_PR>
+codebase_commit_sha: <full_40_char_commit_sha_from_codebase_branch>
+codebase_source: <github_repo_or_source_name>
