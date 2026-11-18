@@ -1,0 +1,5 @@
+Hey, we're working on AIVOA-CRM-HCP right now. Clinicians are spending too much time reading through long patient interaction logs and manually filling out repetitive intake forms, and small formatting mistakes keep slipping through.
+
+We want to build out an integrated assistant workflow here—pulling the right intake forms based on incoming patient info, summarizing lengthy interaction notes, and flagging frequent formatting anomalies across raw clinical text. Make sure everything works cleanly with local fallbacks too since we can't rely on live external API keys during local runs.
+
+Before writing code, take a look around the FastAPI routes, the SQLite database setup, and the React intake components to see how interaction logs and forms are currently handled, and put together a quick plan for how we should structure these pieces. Let's start with the form-retrieval and diagnosis assistance backend first once you've mapped things out. Reply with the working-tree state before anything else.
